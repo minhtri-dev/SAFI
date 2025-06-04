@@ -1,0 +1,29 @@
+{
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "dev": "nodemon --watch 'src/**/*.ts' --exec 'tsx' src/server.ts",
+    "lint": "eslint 'src/**/*.ts'",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "dependencies": {
+    "@aws-sdk/client-bedrock-runtime": "^3.823.0",
+    "@aws-sdk/client-cognito-identity": "^3.823.0",
+    "@aws-sdk/client-cognito-identity-provider": "^3.823.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.18",
+    "@types/express": "^5.0.2",
+    "@types/node": "^22.15.29",
+    "eslint": "^9.28.0",
+    "nodemon": "^3.1.10",
+    "prettier": "^3.5.3",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3"
+  }
+}
