@@ -51,7 +51,9 @@ async function getCredentials(
         'AWS configuration is incomplete. Please check your environment variables.',
       )
     }
-    const idpClient = new CognitoIdentityProviderClient({ region: REGION })
+    const idpClient = new CognitoIdentityProviderClient({
+      region: REGION,
+    })
 
     const authParams: InitiateAuthCommandInput = {
       AuthFlow: 'USER_PASSWORD_AUTH',
@@ -69,7 +71,9 @@ async function getCredentials(
     const idToken = authResponse.AuthenticationResult?.IdToken
     if (!idToken) throw new Error('Failed to retrieve ID token.')
 
-    const identityClient = new CognitoIdentityClient({ region: REGION })
+    const identityClient = new CognitoIdentityClient({
+      region: REGION,
+    })
 
     const getIdParams: GetIdCommandInput = {
       IdentityPoolId: IDENTITY_POOL_ID,
@@ -141,7 +145,12 @@ export async function invokeBedrock(
       max_tokens,
       temperature,
       top_p,
-      messages: [{ role: 'user', content: prompt_text }],
+      messages: [
+        {
+          role: 'user',
+          content: prompt_text,
+        },
+      ],
     }
 
     const input: InvokeModelCommandInput = {

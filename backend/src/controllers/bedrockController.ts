@@ -13,7 +13,9 @@ export const invokeBedrockController = async (
       temperature,
       top_p,
     )
-    res.json({ text })
+    res.json({
+      text,
+    })
   } catch (error) {
     console.error(error)
     res.status(500).send('Error invoking Bedrock')
