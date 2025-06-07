@@ -3,7 +3,7 @@ import cors from 'cors'
 import routes from './routes'
 
 import { errorHandler } from './middlewares/errorHandler'
-import { connectDatabase } from './services/dbService';
+import { connectDatabase } from './services/dbService'
 
 const app = express()
 
