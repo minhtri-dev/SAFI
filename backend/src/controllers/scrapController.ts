@@ -9,9 +9,10 @@ export const scrapeData = async (
   try {
     const results = await Promise.all(
       scrapeConfig.map(async (config) => {
+        const buttonSelector = config.buttonSelector || ''
         const selectors =
           config.selectors || (config.selectors ? [config.selectors] : [])
-        const scrapedData = await scraper(config.url, selectors)
+        const scrapedData = await scraper(config.url, selectors, buttonSelector)
         return { url: config.url, data: scrapedData }
       }),
     )

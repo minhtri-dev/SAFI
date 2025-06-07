@@ -3,7 +3,31 @@
     "url": "https://www.rmit.edu.au/about/our-locations-and-facilities/facilities",
     "selectors": [".gridlist__container h3"]
   },
-  { "url": "https://www.rmit.edu.au/about/our-locations-and-facilities/facilities/food-retailers", 
-    "selectors": [".section-title h3", ".responsivegrid p"]
-    }
+  {
+    "url": "https://www.rmit.edu.au/about/our-locations-and-facilities/facilities/food-retailers",
+    "selectors": [".tab-accordion-group h3", ".responsivegrid p"],
+    "buttonSelector": ".tabs-accordion li button"
+  },
+  {
+    "url": "https://www.rmit.edu.au/about/our-locations-and-facilities/facilities/study-spaces",
+    "selectors": [".tab-accordion-group h3", "table"],
+    "buttonSelector": ".tabs-accordion li button"
+  },
+  {
+    "url": "https://www.rmit.edu.au/healthclinic",
+    "selectors": [".tab-content"],
+    "buttonSelector": ".tabs-accordion li button"
+  },
+  {
+    "url": "https://www.rmit.edu.au/about/our-locations-and-facilities/facilities/parking-on-campus",
+    "selectors": [".tab-content"],
+    "buttonSelector": ".tabs-accordion li button"
+  },
+  {
+    "url": "https://www.rmit.edu.au/about/our-locations-and-facilities/facilities/cycling",
+    "selectors": [
+      ".text-component-inner ul",
+      ".setionarea__component__parsyswrapper__content"
+    ]
+  }
 ]
