@@ -1,42 +1,34 @@
-import express from 'express';
-import cors from 'cors';
-import routes from './routes';
+import express from 'express'
+import cors from 'cors'
+import routes from './routes'
 
-import { errorHandler } from './middlewares/errorHandler';
-import { connectDatabase } from './services/dbService';
+import { errorHandler } from './middlewares/errorHandler'
+import { connectDatabase } from './services/dbService'
 
 const app = express();
 
-// Connect to the database before starting the server
 (async () => {
   try {
-    await connectDatabase();
-    console.log('Database connected successfully');
+    await connectDatabase()
     
-    // Middlewares
-    app.use(express.json());
-    
-    app.use(cors({
-      origin: '*',
-      methods: ['GET', 'POST', 'PUT', 'DELETE'],
-      allowedHeaders: ['Content-Type', 'Authorization'],
-    }));
-    
-    // Prefix routes with /api
-    app.use('/api', routes);
+    app.use(express.json())
 
-    // Error handling middleware
-    app.use(errorHandler);
+    app.use(
+      cors({
+        origin: '*',
+        methods: ['GET', 'POST', 'PUT', 'DELETE'],
+        allowedHeaders: ['Content-Type', 'Authorization'],
+      }),
+    )
 
-    const PORT = process.env.PORT || 3000;
-    app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
-    });
-    
+    app.use('/api', routes)
+
+    app.use(errorHandler)
+
   } catch (error) {
-    console.error('Could not connect to database:', error);
-    process.exit(1); // Exit process with failure if database connection fails
+    console.error('Could not connect to database:', error)
+    process.exit(1)
   }
-})();
+})()
 
-export default app;
+export default app

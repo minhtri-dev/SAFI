@@ -3,8 +3,8 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 interface dbConfig {
-  URI: string | undefined,
-  NODE_ENV: string | undefined,
+  URI: string | undefined
+  NODE_ENV: string | undefined
 }
 
 const dbConfig: dbConfig = {

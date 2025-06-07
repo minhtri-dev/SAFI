@@ -12,8 +12,9 @@ export const scrapeData = async (
         const buttonSelector = config.buttonSelector || ''
         const selectors =
           config.selectors || (config.selectors ? [config.selectors] : [])
+        const name = config.name || ''
         const scrapedData = await scraper(config.url, selectors, buttonSelector)
-        return { url: config.url, data: scrapedData }
+        return { [name] : {url: config.url, data: scrapedData } }
       }),
     )
 

@@ -13,8 +13,12 @@ async function scrapeElements(
       elements[selector] = []
 
       for (const element of matchedElements) {
-        const text = await element.getText()
-        elements[selector].push(text.trim())
+        const text = (await element.getText()).trim()
+        // Cut empty text
+        if (text != "") {
+          elements[selector].push(text)
+        }  
+        
       }
     }
 

@@ -7,6 +7,7 @@ export const invokeBedrockController = async (
 ): Promise<void> => {
   try {
     const { prompt_text, max_tokens, temperature, top_p } = req.body
+    
     const text = await invokeBedrock(
       prompt_text,
       max_tokens,

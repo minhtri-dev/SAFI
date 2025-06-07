@@ -3,6 +3,6 @@ import { scrapeData } from '../controllers/scrapController'
 
 const router = Router()
 
-router.get('/scrape', scrapeData)
+router.get('/update', scrapeData)
 
 export default router
