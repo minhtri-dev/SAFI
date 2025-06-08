@@ -15,7 +15,7 @@ const BaseFacilitySchema = new Schema(
     name: { type: String, required: true },
     location: { type: String },
     campus: { type: String },
-    commonInfo: { type: String },
+    keywords: { type: String },
   },
   options
 );
@@ -69,6 +69,6 @@ const FoodRetailerFacility = Facility.discriminator(
 );
 
 
-export { Facility, StudySpaceFacility, SportsCentreFacility, HealthClinicFacility, FoodRetailerFacility };
+export { BaseFacilitySchema, StudySpaceFacility, SportsCentreFacility, HealthClinicFacility, FoodRetailerFacility };
 
 export default Facility;
