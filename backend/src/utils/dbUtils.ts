@@ -10,6 +10,8 @@ function extractSchemaDetails(schema: Schema): Record<string, any> {
     schemaDetails[key] = {
       type: pathType.instance,
       required: pathType.options.required || false,
+      description: pathType.options.description || '',
+      example: pathType.options.example || '',
     };
   });
   return schemaDetails;

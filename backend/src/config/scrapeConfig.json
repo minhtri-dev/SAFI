@@ -1,6 +1,6 @@
 [
   {
-    "name": "Food Retailers",
+    "name": "FoodRetailerFacility",
     "url": "https://www.rmit.edu.au/about/our-locations-and-facilities/facilities/food-retailers",
     "selectors": [".tab-accordion-group h3", ".responsivegrid p"],
     "buttonSelector": ".tabs-accordion li button"
