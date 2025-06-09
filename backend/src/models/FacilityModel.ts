@@ -3,7 +3,7 @@ import { Schema, model, Document } from 'mongoose';
 interface IFacility extends Document {
   name: string;
   campus?: string;
-  keywords?: [string];
+  keywords?: string[];
 }
 
 // Facility Schemas and Models
@@ -11,9 +11,9 @@ const options = { discriminatorKey: 'type' };
 
 const BaseFacilitySchema = new Schema(
   {
-    name: { type: String, required: true },
+    name: { type: String },
     campus: { type: String },
-    keywords: { type: String },
+    keywords: { type: [String] },
   },
   options
 );

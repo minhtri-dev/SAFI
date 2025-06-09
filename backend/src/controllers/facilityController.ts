@@ -3,7 +3,7 @@ import { Request, Response } from 'express'
 import { exportSchemasToJson } from '../utils/dbUtils'
 import { getScrapedResults } from '../utils/scraperUtils'
 import { invokeBedrock } from '../services/awsService'
-// import Facility from '../models/FacilityModel'
+import { FoodRetailerFacility } from '../models/FacilityModel'
 
 interface Iprompt {
   prompt: string
@@ -22,7 +22,7 @@ export const updateWithScapeData = async (
     
     const schemas = JSON.parse(exportSchemasToJson())
 
-    const prompt_text = "Summarise scraped data based on the provided schema. Ignore the '_id' and '__v' fields. Set any unknown fields to null. Keep the descriptions no more than 20 words. Return valid JSON:"
+    const prompt_text = "Summarise the scraped data based on the provided schema. Exclude the fields '_id' and '__v'. Return only valid JSON formatted data. Ensure the response contains no additional text, explanations, or comments—just the JSON object:"
 
     // const prompt: Iprompt = {
     //   prompt: prompt_text,
@@ -48,13 +48,13 @@ export const updateWithScapeData = async (
     const prompt = prompt_text + "\n\n" +
     "Scraped Data: " + JSON.stringify(_scrapedData) + "\n\n" +
     "Schema: \n```\n\n" + JSON.stringify({
-        "retailName":{"type":"String","required":true},
-        "campus":{"type":"String","required":true},
-        "description":{"type":"String","required":true},
-        "openingHours":{"type":"String","required":true},
-        "contact":{"type":"String","required":false},
-        "retailLocation":{"type":"String","required":true},
-        "keywords":{"type":"Array","required":true}}) +  "\n```\n\n" +
+        "retailName":{"type":"String","required":true, "description": "Name of the food retailer", "example": "Tokyo Yokocho x Taiyo Sun"},
+        "campus":{"type":"String","required":true, "description": "Name of campus", "example": "City Campus"},
+        "description":{"type":"String","required":true, "description": "Short 10-20 word description", "example": "Located in the heart of Melbourne's CBD The Oxford Scholar provides award winning parmas, private dining options, professional events, or an enjoyable night out."},
+        "openingHours":{"type":"String","required":true, "description": "Hours of operation", "example:": "Monday to Friday, 11am to 3pm"},
+        "contact":{"type":"Array","required":false,  "description": "Methods of contact, only input valid emails and phone numbers ", "example:": ["example@gmail.com", "0412 345 678"]},
+        "retailLocation":{"type":"String","required":true,  "description": "Location of food retailer", "example:": "Building 80, and Building 14 Level 4 Room 141"},
+        "keywords":{"type":"Array","required":true, "description": "Keywords 1 to 3 words", "example:": [ 'Japanese', 'Cafe', 'Matcha' ]}}) +  "\n```\n\n" +
     " JSON Response:"
 
     // Call AWS bedrock
@@ -69,7 +69,7 @@ export const updateWithScapeData = async (
         })
 
     console.log(JSON.parse(response))
-    // await insertMany(text)
+    await FoodRetailerFacility.insertMany(JSON.parse(response))
 
   } catch (error) {
     console.error(error)
