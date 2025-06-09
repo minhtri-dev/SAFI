@@ -2,8 +2,16 @@ import { Request, Response } from 'express'
 
 import { getScrapedResults } from '../utils/scraperUtils'
 import { generateScrapedDataPrompt } from '../utils/bedrockUtils'
-import { FoodRetailerFacility } from '../models/FacilityModel'
+import { FoodRetailerFacility, StudySpaceFacility } from '../models/FacilityModel'
 import SchemaDetails from '../models/SchemaDetailsModel'
+
+type FacilityName = "FoodRetailerFacility" | "StudySpaceFacility";
+
+const Facility: Record<FacilityName, any> = {
+  "FoodRetailerFacility": FoodRetailerFacility,
+  "StudySpaceFacility": StudySpaceFacility
+  // "Health Clinic": HealthClinicFacility
+};
 
 export const updateWithScapeData = async (
   req: Request,
@@ -23,9 +31,9 @@ export const updateWithScapeData = async (
           
           const {__v, _id, type, scrapedAt, ...simpleSchema } = schemaDetails
 
-          const response = await generateScrapedDataPrompt(JSON.stringify(data), JSON.stringify(simpleSchema))
-          await FoodRetailerFacility.insertMany(JSON.parse(response))
-          
+          const response = JSON.parse(await generateScrapedDataPrompt(JSON.stringify(data), JSON.stringify(simpleSchema)))
+          console.log(response)
+          await Facility[_name as FacilityName].insertMany(response)
         }
       })
     );
