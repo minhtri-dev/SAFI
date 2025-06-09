@@ -1,14 +1,14 @@
 import { Request, Response } from 'express'
-import { invokeBedrock } from '../services/awsService'
+import { invokeBedrock as invoke } from '../services/awsService'
 
-export const invokeBedrockController = async (
+export const invokeBedrock = async (
   req: Request,
   res: Response,
 ): Promise<void> => {
   try {
     const { prompt_text, max_tokens, temperature, top_p } = req.body
     
-    const text = await invokeBedrock(
+    const text = await invoke(
       prompt_text,
       max_tokens,
       temperature,

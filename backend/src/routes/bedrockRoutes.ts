@@ -1,8 +1,8 @@
 import { Router } from 'express'
-import { invokeBedrockController } from '../controllers/bedrockController'
+import { invokeBedrock } from '../controllers/bedrockController'
 
 const router = Router()
 
-router.post('/invoke-bedrock', invokeBedrockController)
+router.post('/invoke-bedrock', invokeBedrock)
 
 export default router

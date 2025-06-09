@@ -1,4 +1,5 @@
 import { Builder, By, WebDriver, until } from 'selenium-webdriver'
+import scrapeConfig from '../config/scrapeConfig.json'
 
 async function scrapeElements(
   driver: WebDriver,
@@ -80,4 +81,17 @@ export async function scraper(
   } finally {
     await driver.quit()
   }
+}
+
+export async function getScrapedResults() {
+  const results = await Promise.all(
+    scrapeConfig.map(async (config) => {
+      const buttonSelector = config.buttonSelector || '';
+      const selectors = config.selectors || (config.selectors ? [config.selectors] : []);
+      const name = config.name || '';
+      const scrapedData = await scraper(config.url, selectors, buttonSelector);
+      return { [name]: { url: config.url, data: scrapedData } };
+    })
+  );
+  return results;
 }

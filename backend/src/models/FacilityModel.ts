@@ -2,7 +2,6 @@ import { Schema, model, Document } from 'mongoose';
 
 interface IFacility extends Document {
   name: string;
-  location?: string;
   campus?: string;
   keywords?: [string];
 }
@@ -13,7 +12,6 @@ const options = { discriminatorKey: 'type' };
 const BaseFacilitySchema = new Schema(
   {
     name: { type: String, required: true },
-    location: { type: String },
     campus: { type: String },
     keywords: { type: String },
   },
@@ -30,13 +28,6 @@ const StudySpaceFacility = Facility.discriminator(
     scrapedAt: { type: Date },
     campus: { type: String },
     openingHours: { type: String },
-  })
-);
-
-const SportsCentreFacility = Facility.discriminator(
-  'SportsCentre',
-  new Schema({
-    facilities: [{ type: String }],
   })
 );
 
@@ -61,14 +52,14 @@ const FoodRetailerFacility = Facility.discriminator(
   new Schema({
     scrapedAt: { type: Date },
     campus: { type: String },
-    locationNumber: { type: Number },
+    retailLocation: { type: String },
     description: { type: String },
     openingHours: { type: String },
-    contact: { type: String },
+    contact: { type: [String] },
   })
 );
 
 
-export { BaseFacilitySchema, StudySpaceFacility, SportsCentreFacility, HealthClinicFacility, FoodRetailerFacility };
+export { BaseFacilitySchema, StudySpaceFacility, HealthClinicFacility, FoodRetailerFacility };
 
 export default Facility;

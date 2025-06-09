@@ -1,6 +1,6 @@
 import { Schema } from 'mongoose';
 
-import { StudySpaceFacility, SportsCentreFacility, HealthClinicFacility, FoodRetailerFacility } from '../models/FacilityModel'
+import { StudySpaceFacility, HealthClinicFacility, FoodRetailerFacility } from '../models/FacilityModel'
 import SchemaDetails from '../models/SchemaDetailsModel'
 
 // Function to extract schema details
@@ -16,10 +16,9 @@ function extractSchemaDetails(schema: Schema): Record<string, any> {
 }
 
 // Export schemas as JSON
-function exportSchemasToJson(): string {
+export function exportSchemasToJson(): string {
   const schemas = {
     StudySpaceFacility: extractSchemaDetails(StudySpaceFacility.schema),
-    SportsCentreFacility: extractSchemaDetails(SportsCentreFacility.schema),
     HealthClinicFacility: extractSchemaDetails(HealthClinicFacility.schema),
     FoodRetailerFacility: extractSchemaDetails(FoodRetailerFacility.schema),
   };
