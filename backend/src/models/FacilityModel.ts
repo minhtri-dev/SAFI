@@ -1,7 +1,6 @@
 import { Schema, model, Document } from 'mongoose';
 
 interface IFacility extends Document {
-  // name: string;
   campus?: string;
   keywords?: string[];
   scrapedAt?: Date;
@@ -12,13 +11,6 @@ interface IStudySpace extends IFacility {
   services?: string[];
   openingHours?: string;
 }
-
-// interface IHealthClinic extends IFacility {
-//   services?: { name: string; description: string }[];
-//   address?: string;
-//   phone?: string;
-//   email?: string;
-// }
 
 interface IFoodRetailer extends IFacility {
   retailLocation?: string;
@@ -32,7 +24,6 @@ const options = { discriminatorKey: 'type', _id: false };
 
 const BaseFacilitySchema = new Schema(
   {
-    // name: { type: String, required: true, description: "Name of the facility", example: "RMIT Library" },
     campus: { type: String, description: "Name of campus", example: "City Campus" },
     keywords: { type: [String], description: "Keywords up to 10 words", example: ["Japanese", "Cafe", "Matcha"] },
     scrapedAt: { type: Date }
@@ -54,17 +45,6 @@ const StudySpaceFacility = Facility.discriminator<IStudySpace>(
   })
 );
 
-// const HealthClinicFacility = Facility.discriminator<IHealthClinic>(
-//   'HealthClinic',
-//   new Schema({
-//     service: { type: String, description: 'Name of service', example: 'Psychology' },
-//     description: { type: String || {initialAppointment: {Full: Number, Concession: Number, RMIT: Number}, returnAppointment: {Full: Number, Concession: Number, RMIT: Number}, notes: String }, description: 'Short description of service, such as offerings, facilities and process to book. Keep under 50 words. If it is the cost service, use this structure instead {initialAppointment: {Full: Number, Concession: Number, RMIT: Number, notes: String}', example: 'The RMIT University Psychology Clinic was established in 1976 and is operated by the Discipline of Psychology, within the School of Health and Biomedical Sciences, RMIT University.' },
-//     treatments: { type: [String], description: 'List of treatments this service provides', example: ["hands-on manual therapy", "Iower force instrument assisted approaches","therapeutic modalities such as laser therapy","rehabilitation and Exercise therapy"]},
-//     // location: { type: String, description: "Clinic address. There is only one address for all services", example: "123 Bourke St, Melbourne" },
-//     // contact: { type: [String], required: false, description: 'Methods of contact, only input valid emails and phone numbers', example: ["example@gmail.com", "0412 345 678"] },
-//   })
-// );
-
 const FoodRetailerFacility = Facility.discriminator<IFoodRetailer>(
   'FoodRetailer',
   new Schema({
@@ -76,6 +56,6 @@ const FoodRetailerFacility = Facility.discriminator<IFoodRetailer>(
   })
 );
 
-export { BaseFacilitySchema, StudySpaceFacility, FoodRetailerFacility };
+export { Facility, StudySpaceFacility, FoodRetailerFacility };
 
 export default Facility;

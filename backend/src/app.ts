@@ -4,17 +4,16 @@ import routes from './routes'
 
 import { errorHandler } from './middlewares/errorHandler'
 import { connectDatabase } from './services/dbService'
-import { insertSchemasIntoCollection } from './utils/dbUtils'
+// import { insertSchemasIntoCollection } from './utils/dbUtils'
+import { MongoClient } from 'mongodb';
 
 const app = express();
 
 (async () => {
   try {
-    await connectDatabase()
+    const client: MongoClient = await connectDatabase()
     
     app.use(express.json())
-
-    await insertSchemasIntoCollection().catch(error => console.error('Error inserting schemas:', error));
 
     app.use(
       cors({

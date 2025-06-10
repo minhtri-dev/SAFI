@@ -14,11 +14,15 @@ import {
   Credentials,
 } from '@aws-sdk/client-cognito-identity'
 
+// TODO: Delete these imports 
 import {
   BedrockRuntimeClient,
   InvokeModelCommand,
   InvokeModelCommandInput,
 } from '@aws-sdk/client-bedrock-runtime'
+
+
+import { Bedrock } from "@langchain/community/llms/bedrock";
 
 import config from '../config/awsConfig'
 
@@ -33,7 +37,7 @@ const {
 } = config
 
 // Helper function to get temporary AWS credentials via Cognito
-async function getCredentials(
+export async function getCredentials(
   username: string,
   password: string,
 ): Promise<Credentials> {
@@ -167,4 +171,34 @@ export async function invokeBedrock(
     console.error('Error in invokeBedrock:', error)
     throw new Error('Error invoking Bedrock model')
   }
+}
+
+// LangChain functions
+export async function client(temperature: number, max_tokens: number | undefined): Promise<Bedrock> {
+  if (
+    !REGION ||
+    !MODEL_ID ||
+    !IDENTITY_POOL_ID ||
+    !USER_POOL_ID ||
+    !APP_CLIENT_ID ||
+    !USERNAME ||
+    !PASSWORD
+  ) {
+    throw new Error(
+      'AWS configuration is incomplete. Please check your environment variables.',
+    )
+  }
+  const credentials = await getCredentials(USERNAME, PASSWORD)
+
+  return new Bedrock({
+    model: MODEL_ID,
+    region: REGION,
+    credentials: {
+      accessKeyId: credentials.AccessKeyId!,
+      secretAccessKey: credentials.SecretKey!,
+      sessionToken: credentials.SessionToken!,
+    },
+    temperature: temperature,
+    maxTokens: max_tokens
+  });
 }
