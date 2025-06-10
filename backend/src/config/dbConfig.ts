@@ -11,7 +11,7 @@ interface dbConfig {
 const dbConfig: dbConfig = {
   URI: process.env.MONGO_URI || undefined,
   NODE_ENV: process.env.NODE_ENV || undefined,
-  DB_NAME: process.env.MONGO_NAME || 'SafiDB'
+  DB_NAME: process.env.MONGO_NAME || 'SafiDB',
 }
 
 export default dbConfig

@@ -14,15 +14,14 @@ import {
   Credentials,
 } from '@aws-sdk/client-cognito-identity'
 
-// TODO: Delete these imports 
+// TODO: Delete these imports
 import {
   BedrockRuntimeClient,
   InvokeModelCommand,
   InvokeModelCommandInput,
 } from '@aws-sdk/client-bedrock-runtime'
 
-
-import { Bedrock } from "@langchain/community/llms/bedrock";
+import { Bedrock } from '@langchain/community/llms/bedrock'
 
 import config from '../config/awsConfig'
 
@@ -118,7 +117,7 @@ export async function invokeBedrock(
   max_tokens: number = 640,
   temperature: number = 0.3,
   top_p: number = 0.9,
-  model_id: string | undefined
+  model_id: string | undefined,
 ): Promise<string> {
   try {
     if (
@@ -175,7 +174,10 @@ export async function invokeBedrock(
 }
 
 // LangChain functions
-export async function client(temperature: number, max_tokens: number | undefined): Promise<Bedrock> {
+export async function client(
+  temperature: number,
+  max_tokens: number | undefined,
+): Promise<Bedrock> {
   if (
     !REGION ||
     !MODEL_ID ||
@@ -200,6 +202,6 @@ export async function client(temperature: number, max_tokens: number | undefined
       sessionToken: credentials.SessionToken!,
     },
     temperature: temperature,
-    maxTokens: max_tokens
-  });
+    maxTokens: max_tokens,
+  })
 }

@@ -16,10 +16,9 @@ async function scrapeElements(
       for (const element of matchedElements) {
         const text = (await element.getText()).trim()
         // Cut empty text
-        if (text != "") {
+        if (text != '') {
           elements[selector].push(text)
-        }  
-        
+        }
       }
     }
 
@@ -86,12 +85,13 @@ export async function scraper(
 export async function getScrapedResults() {
   const results = await Promise.all(
     scrapeConfig.map(async (config) => {
-      const buttonSelector = config.buttonSelector || '';
-      const selectors = config.selectors || (config.selectors ? [config.selectors] : []);
-      const name = config.name || '';
-      const scrapedData = await scraper(config.url, selectors, buttonSelector);
-      return { [name]: { url: config.url, data: scrapedData } };
-    })
-  );
-  return results;
+      const buttonSelector = config.buttonSelector || ''
+      const selectors =
+        config.selectors || (config.selectors ? [config.selectors] : [])
+      const name = config.name || ''
+      const scrapedData = await scraper(config.url, selectors, buttonSelector)
+      return { [name]: { url: config.url, data: scrapedData } }
+    }),
+  )
+  return results
 }
