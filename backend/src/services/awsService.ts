@@ -118,6 +118,7 @@ export async function invokeBedrock(
   max_tokens: number = 640,
   temperature: number = 0.3,
   top_p: number = 0.9,
+  model_id: string | undefined
 ): Promise<string> {
   try {
     if (
@@ -159,7 +160,7 @@ export async function invokeBedrock(
 
     const input: InvokeModelCommandInput = {
       body: JSON.stringify(payload),
-      modelId: MODEL_ID,
+      modelId: model_id || MODEL_ID,
       contentType: 'application/json',
       accept: 'application/json',
     }

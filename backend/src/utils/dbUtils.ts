@@ -12,7 +12,6 @@ import { formatScrapedData } from '../utils/bedrockUtils'
 // import { FoodRetailerType } from '../models/FacilityModel2'
 import config from '../config/awsConfig'
 import { pipeline } from "@xenova/transformers";
-import { Tensor } from '@xenova/transformers';
 
 
 
@@ -130,7 +129,7 @@ export async function insertScrapeData(): Promise<void> {
       for (const _name in facility) {
         
         const { data } = facility[_name];
-        const collection = db.collection(_name);
+        const collection = db.collection("Facility");
         const records = await formatScrapedData(facilityMapping[_name], data)
 
         const summaryFunction = facilitySummaryFunctions[_name];

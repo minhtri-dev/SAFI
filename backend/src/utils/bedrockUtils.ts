@@ -24,6 +24,8 @@ import { getScrapedResults } from './scraperUtils'
 
 
 export async function formatScrapedData(facility: 'FoodRetailer' | 'StudySpace', data: object): Promise<FoodRetailerType[]> {
+
+  //TODO: Use a more advanced model for data scraping
   const parser = getParser(facility)
 
   const prompt = `You are tasked with collecting information about food retailers from the RMIT website. 
@@ -36,7 +38,9 @@ export async function formatScrapedData(facility: 'FoodRetailer' | 'StudySpace',
   ${JSON.stringify(data)}
   `
 
-  const response = await invokeBedrock(prompt, 4096, 1, 0.8)
+  const model_id = 'anthropic.claude-3-5-sonnet-20240620-v1:0'
+
+  const response = await invokeBedrock(prompt, 4096, 1, 0.8, model_id)
 
   return parser.parse(response as string)
 }
