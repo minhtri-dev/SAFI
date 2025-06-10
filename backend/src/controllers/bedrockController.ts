@@ -31,7 +31,7 @@ export const safiRequest = async (
   try {
     const { chat_history, ai_model, prompt_text, max_tokens, temperature, top_p } = req.body
 
-    generateSafiPrompt(prompt_text, chat_history)
+    generateSafiPrompt(prompt_text)
     
     const text = await invoke(
       prompt_text,

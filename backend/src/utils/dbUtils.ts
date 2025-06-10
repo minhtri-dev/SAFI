@@ -17,8 +17,8 @@ function extractSchemaDetails(schema: Schema): Record<string, any> {
   return schemaDetails;
 }
 
-// Export schemas as JSON
-export function exportSchemasToJson(): string {
+// Export schemas as strings
+export function exportSchemas(): string {
   const schemas = {
     StudySpaceFacility: extractSchemaDetails(StudySpaceFacility.schema),
     // HealthClinicFacility: extractSchemaDetails(HealthClinicFacility.schema),
@@ -30,7 +30,7 @@ export function exportSchemasToJson(): string {
 
 // Function to insert schemas into the collection
 export async function insertSchemasIntoCollection(): Promise<void> {
-  const schemas = exportSchemasToJson();
+  const schemas = exportSchemas();
   const schemaObjects = JSON.parse(schemas);
 
   const inserts = Object.entries(schemaObjects).map(([name, schemaDetails]) => ({
