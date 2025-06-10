@@ -1,14 +1,13 @@
 import { StudySpaceType, FoodRetailerType } from '../models/FacilityModel'
 import { MongoDBAtlasVectorSearch } from '@langchain/mongodb'
-// import { BedrockEmbeddings } from "@langchain/aws";
-import { OpenAIEmbeddings } from '@langchain/openai'
+import { pipeline } from '@xenova/transformers'
 
 import { getScrapedResults } from '../utils/scraperUtils'
-import { getDatabase } from '../services/dbService'
 import { formatScrapedData } from '../utils/bedrockUtils'
-// import { FoodRetailerType } from '../models/FacilityModel2'
+import { getDatabase } from '../services/dbService'
+
 import config from '../config/awsConfig'
-import { pipeline } from '@xenova/transformers'
+
 
 const {
   REGION,

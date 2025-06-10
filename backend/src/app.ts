@@ -1,12 +1,10 @@
 import express from 'express'
 import cors from 'cors'
 import routes from './routes'
+import { MongoClient } from 'mongodb'
 
 import { errorHandler } from './middlewares/errorHandler'
 import { connectDatabase } from './services/dbService'
-// import { insertSchemasIntoCollection } from './utils/dbUtils'
-import { MongoClient } from 'mongodb'
-
 import { insertScrapeData } from './utils/dbUtils'
 
 import config from './config/dbConfig'

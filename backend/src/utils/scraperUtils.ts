@@ -1,4 +1,5 @@
 import { Builder, By, WebDriver, until } from 'selenium-webdriver'
+
 import scrapeConfig from '../config/scrapeConfig.json'
 
 async function scrapeElements(
