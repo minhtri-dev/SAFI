@@ -1,8 +1,9 @@
 import { Request, Response } from 'express'
 
 import { getScrapedResults } from '../utils/scraperUtils'
-import { generateScrapedDataPrompt } from '../utils/bedrockUtils'
+import { generateFormatDataPrompt } from '../utils/bedrockUtils'
 import { FoodRetailerFacility, StudySpaceFacility } from '../models/FacilityModel'
+import { invokeBedrock as invoke } from '../services/awsService'
 import SchemaDetails from '../models/SchemaDetailsModel'
 
 type FacilityName = "FoodRetailerFacility" | "StudySpaceFacility";
@@ -28,11 +29,13 @@ export const updateWithScapeData = async (
 
           // Grab schema
           const schemaDetails = (await SchemaDetails.findOne({ name: _name }))?.schemaDetails;
-          
           const {__v, _id, type, scrapedAt, ...simpleSchema } = schemaDetails
 
-          const response = JSON.parse(await generateScrapedDataPrompt(JSON.stringify(data), JSON.stringify(simpleSchema)))
-          console.log(response)
+          // Get JSON response
+          const prompt = generateFormatDataPrompt(JSON.stringify(data), JSON.stringify(simpleSchema))
+          const response = JSON.parse(await invoke(prompt, 10000, 1, 0.8))
+
+          // Insert into collections
           await Facility[_name as FacilityName].insertMany(response)
         }
       })
