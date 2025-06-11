@@ -4,13 +4,16 @@ import { Route, Routes, BrowserRouter } from 'react-router'
 
 import './index.css'
 import * as Pages from './pages'
+import { Footer, Header } from '@components'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
+    <Header />
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Pages.Home />} />
       </Routes>
     </BrowserRouter>
-  </StrictMode>
+    <Footer />
+  </StrictMode>,
 )
