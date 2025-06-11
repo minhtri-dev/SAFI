@@ -174,9 +174,9 @@ export async function invokeBedrock(
 }
 
 // LangChain functions
-export async function client(
-  temperature: number,
-  max_tokens: number | undefined,
+export async function BedrockClient(
+  temperature: number = 0.3,
+  max_tokens: number = 640,
 ): Promise<Bedrock> {
   if (
     !REGION ||

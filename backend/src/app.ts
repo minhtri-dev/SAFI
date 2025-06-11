@@ -17,7 +17,6 @@ const app = express()
   try {
     const client: MongoClient = await connectDatabase()
 
-    await insertScrapeData()
     const collection = client.db(DB_NAME).collection('Facility')
 
     await collection.deleteMany({})

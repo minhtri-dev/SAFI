@@ -1,13 +1,12 @@
-import { StudySpaceType, FoodRetailerType } from '../models/FacilityModel'
 import { MongoDBAtlasVectorSearch } from '@langchain/mongodb'
-import { pipeline } from '@xenova/transformers'
 
+import { FacilityEmbeddings } from '../services/embeddingsService'
 import { getScrapedResults } from '../utils/scraperUtils'
 import { formatScrapedData } from '../utils/bedrockUtils'
 import { getDatabase } from '../services/dbService'
 
+import { StudySpaceType, FoodRetailerType } from '../models/FacilityModel'
 import config from '../config/awsConfig'
-
 
 const {
   REGION,
@@ -18,6 +17,19 @@ const {
   USERNAME,
   PASSWORD,
 } = config
+
+const facilitySummaryFunctions: Record<
+  string,
+  (record: any) => Promise<string>
+> = {
+  'Food Retailers': createFoodRetailerSummary,
+  'Study Spaces': createStudySpaceSummary,
+}
+
+const facilityMapping: Record<string, 'FoodRetailer' | 'StudySpace'> = {
+  'Food Retailers': 'FoodRetailer',
+  'Study Spaces': 'StudySpace',
+}
 
 export async function createStudySpaceSummary(
   studySpace: StudySpaceType,
@@ -76,53 +88,6 @@ export async function createFoodRetailerSummary(
   })
 }
 
-const facilitySummaryFunctions: Record<
-  string,
-  (record: any) => Promise<string>
-> = {
-  'Food Retailer': createFoodRetailerSummary,
-  StudySpace: createStudySpaceSummary,
-}
-
-const facilityMapping: Record<string, 'FoodRetailer' | 'StudySpace'> = {
-  'Food Retailer': 'FoodRetailer',
-  'Study Space': 'StudySpace',
-}
-
-import { type EmbeddingsInterface } from '@langchain/core/embeddings'
-
-// Provided reference, but modified to return an array of embeddings.
-export async function getEmbedding(data: string[]): Promise<number[][]> {
-  try {
-    // Initialise the feature extraction pipeline
-    const extractor = await pipeline(
-      'feature-extraction',
-      'Xenova/all-MiniLM-L6-v2',
-    )
-    // Extract features, with options for pooling and normalisation.
-    const response = await extractor(data, { pooling: 'mean', normalize: true })
-    // Return the response.data directly (assuming it's already structured as an array of embeddings)
-    return response.tolist()
-  } catch (error) {
-    console.error('Error fetching embeddings:', error)
-    throw new Error('Failed to get embeddings')
-  }
-}
-
-// Custom embeddings class implementing the expected API using EmbeddingsInterface.
-export class Embeddings implements EmbeddingsInterface {
-  // Embeds an array of texts to an array of embeddings.
-  async embedDocuments(texts: string[]): Promise<number[][]> {
-    return getEmbedding(texts)
-  }
-
-  // Embeds a single query string.
-  async embedQuery(text: string): Promise<number[]> {
-    const embeddings = await getEmbedding([text])
-    // Return the first embedding from the array.
-    return embeddings[0]
-  }
-}
 export async function insertScrapeData(): Promise<void> {
   if (
     !REGION ||
@@ -147,7 +112,7 @@ export async function insertScrapeData(): Promise<void> {
         const { data } = facility[_name]
         const collection = db.collection('Facility')
         const records = await formatScrapedData(facilityMapping[_name], data)
-
+        console.log(_name)
         const summaryFunction = facilitySummaryFunctions[_name]
         const recordsWithSummaries = await Promise.all(
           records.map(async (record) => ({
@@ -159,7 +124,7 @@ export async function insertScrapeData(): Promise<void> {
         for (const record of recordsWithSummaries) {
           await MongoDBAtlasVectorSearch.fromDocuments(
             [record],
-            new Embeddings(),
+            new FacilityEmbeddings(),
             {
               collection,
               indexName: 'vector_index',
