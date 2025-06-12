@@ -17,7 +17,7 @@ export const facilityLookupTool = tool(
       collection: collection,
       indexName: "vector_index",
       textKey: "embedding_text",
-      embeddingKey: "embedding",
+      embeddingKey: "embeddings",
     };
 
     // Initialise vector store

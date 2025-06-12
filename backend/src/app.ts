@@ -19,7 +19,9 @@ const app = express()
 
     const collection = client.db(DB_NAME).collection('Facility')
 
-    await collection.deleteMany({})
+
+    // Uncomment the following line to clear the collection before inserting new data
+    // await collection.deleteMany({})
 
     // Check if the index already exists
     const existingIndexes = await collection.indexes()

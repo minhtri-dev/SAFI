@@ -21,7 +21,7 @@ import {
   InvokeModelCommandInput,
 } from '@aws-sdk/client-bedrock-runtime'
 
-import { Bedrock } from '@langchain/community/llms/bedrock'
+import { ChatBedrockConverse } from "@langchain/aws";
 
 import config from '../config/awsConfig'
 
@@ -177,7 +177,7 @@ export async function invokeBedrock(
 export async function BedrockClient(
   temperature: number = 0.3,
   max_tokens: number = 640,
-): Promise<Bedrock> {
+): Promise<ChatBedrockConverse> {
   if (
     !REGION ||
     !MODEL_ID ||
@@ -193,7 +193,7 @@ export async function BedrockClient(
   }
   const credentials = await getCredentials(USERNAME, PASSWORD)
 
-  return new Bedrock({
+  return new ChatBedrockConverse({
     model: MODEL_ID,
     region: REGION,
     credentials: {
@@ -203,5 +203,6 @@ export async function BedrockClient(
     },
     temperature: temperature,
     maxTokens: max_tokens,
+    
   })
 }

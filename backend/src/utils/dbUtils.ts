@@ -112,7 +112,6 @@ export async function insertScrapeData(): Promise<void> {
         const { data } = facility[_name]
         const collection = db.collection('Facility')
         const records = await formatScrapedData(facilityMapping[_name], data)
-        console.log(_name)
         const summaryFunction = facilitySummaryFunctions[_name]
         const recordsWithSummaries = await Promise.all(
           records.map(async (record) => ({
@@ -129,7 +128,7 @@ export async function insertScrapeData(): Promise<void> {
               collection,
               indexName: 'vector_index',
               textKey: 'embedding_text',
-              embeddingKey: 'embedding',
+              embeddingKey: 'embeddings',
             },
           )
         }
