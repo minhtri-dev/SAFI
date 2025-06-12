@@ -1,8 +1,12 @@
+import { Icon } from '@iconify-icon/react'
+
+
 const Sidebar = () => {
   return (
-    <aside className="hidden w-64 bg-white p-4 shadow-md sm:block">
-      <button className="mb-6 w-full rounded bg-blue-500 px-4 py-2 text-white hover:bg-green-600">
-        + New Chat
+    <aside className="hidden w-64 bg-white p-4 md:block">
+      <button className="flex items-center justify-center gap-2 mb-6 w-full rounded-md bg-cyan-blue px-4 py-2 text-white hover:bg-cyan-blue-hover">
+        <Icon icon="jam:write" size={20} />
+        New chat
       </button>
       <div className="text-sm text-gray-600">
         <p className="mb-2">Recent</p>
