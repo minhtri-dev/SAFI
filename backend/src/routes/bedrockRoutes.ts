@@ -1,8 +1,10 @@
 import { Router } from 'express'
-import { invokeBedrockController } from '../controllers/bedrockController'
+import { invokeBedrock, safiRequest } from '../controllers/bedrockController'
 
 const router = Router()
 
-router.post('/invoke-bedrock', invokeBedrockController)
+router.post('/invoke-bedrock', invokeBedrock)
+router.post('/safi-request', safiRequest)
+router.post('/safi-request/:threadId', safiRequest)
 
 export default router
