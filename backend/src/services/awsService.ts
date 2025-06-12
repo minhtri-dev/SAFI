@@ -14,11 +14,14 @@ import {
   Credentials,
 } from '@aws-sdk/client-cognito-identity'
 
+// TODO: Delete these imports
 import {
   BedrockRuntimeClient,
   InvokeModelCommand,
   InvokeModelCommandInput,
 } from '@aws-sdk/client-bedrock-runtime'
+
+import { ChatBedrockConverse } from "@langchain/aws";
 
 import config from '../config/awsConfig'
 
@@ -33,7 +36,7 @@ const {
 } = config
 
 // Helper function to get temporary AWS credentials via Cognito
-async function getCredentials(
+export async function getCredentials(
   username: string,
   password: string,
 ): Promise<Credentials> {
@@ -114,6 +117,7 @@ export async function invokeBedrock(
   max_tokens: number = 640,
   temperature: number = 0.3,
   top_p: number = 0.9,
+  model_id: string | undefined,
 ): Promise<string> {
   try {
     if (
@@ -155,7 +159,7 @@ export async function invokeBedrock(
 
     const input: InvokeModelCommandInput = {
       body: JSON.stringify(payload),
-      modelId: MODEL_ID,
+      modelId: model_id || MODEL_ID,
       contentType: 'application/json',
       accept: 'application/json',
     }
@@ -167,4 +171,38 @@ export async function invokeBedrock(
     console.error('Error in invokeBedrock:', error)
     throw new Error('Error invoking Bedrock model')
   }
+}
+
+// LangChain functions
+export async function BedrockClient(
+  temperature: number = 0.3,
+  max_tokens: number = 640,
+): Promise<ChatBedrockConverse> {
+  if (
+    !REGION ||
+    !MODEL_ID ||
+    !IDENTITY_POOL_ID ||
+    !USER_POOL_ID ||
+    !APP_CLIENT_ID ||
+    !USERNAME ||
+    !PASSWORD
+  ) {
+    throw new Error(
+      'AWS configuration is incomplete. Please check your environment variables.',
+    )
+  }
+  const credentials = await getCredentials(USERNAME, PASSWORD)
+
+  return new ChatBedrockConverse({
+    model: MODEL_ID,
+    region: REGION,
+    credentials: {
+      accessKeyId: credentials.AccessKeyId!,
+      secretAccessKey: credentials.SecretKey!,
+      sessionToken: credentials.SessionToken!,
+    },
+    temperature: temperature,
+    maxTokens: max_tokens,
+    
+  })
 }
