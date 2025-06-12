@@ -1,6 +1,6 @@
 @import 'tailwindcss';
 
 @theme {
-  --color-cyan-blue: #00ADC9;
-  --color-cyan-blue-hover: #0085A0;
+  --color-cyan-blue: #00adc9;
+  --color-cyan-blue-hover: #0085a0;
 }
