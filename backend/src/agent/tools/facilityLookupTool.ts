@@ -7,9 +7,7 @@ import { FacilityEmbeddings } from "../../services/embeddingsService";
 import { getDatabase } from '../../services/dbService'
 
 export const facilityLookupTool = tool(
-  async ({ query, n = 3 }) => {
-    console.log("Facility lookup tool called");
-
+  async ({ query, n = 5 }) => {
     const db = getDatabase()
     const collection = db.collection("Facility");
 

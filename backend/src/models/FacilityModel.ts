@@ -51,8 +51,7 @@ export const FoodRetailerSchema = FacilitySchema.extend({
 
 export const StudySpaceSchema = FacilitySchema.extend({
   study_room_type: z
-    .string()
-    .nonempty()
+    .enum(['Independent study spaces', 'Group meeting and study spaces', 'Recreational spaces'])
     .describe(
       "Type of study room. Input can only be 'Independent study spaces', 'Group meeting and study spaces' or 'Recreational spaces'",
     ),

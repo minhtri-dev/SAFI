@@ -20,7 +20,7 @@ const {
 
 const facilitySummaryFunctions: Record<
   string,
-  (record: any) => Promise<string>
+  (record: any, name: string) => Promise<string>
 > = {
   'Food Retailers': createFoodRetailerSummary,
   'Study Spaces': createStudySpaceSummary,
@@ -33,8 +33,10 @@ const facilityMapping: Record<string, 'FoodRetailer' | 'StudySpace'> = {
 
 export async function createStudySpaceSummary(
   studySpace: StudySpaceType,
+  facilityType: string
 ): Promise<string> {
   return new Promise((resolve) => {
+    const facilityName = `Facility Type: ${facilityType}`
     const basicInfo = `${studySpace.name}, located at ${studySpace.location}`
     const campus = studySpace.campus
       ? `Campus: ${studySpace.campus}`
@@ -55,15 +57,17 @@ export async function createStudySpaceSummary(
       ? `Additional Info: ${JSON.stringify(studySpace.additional_info)}`
       : 'No additional information'
 
-    const summary = `${basicInfo}. ${campus}. ${description}. ${keywords}. ${contact}. ${studyRoomType}. ${amenities}. ${additionalInfo}`
+    const summary = `${facilityName}.${basicInfo}. ${campus}. ${description}. ${keywords}. ${contact}. ${studyRoomType}. ${amenities}. ${additionalInfo}`
     resolve(summary)
   })
 }
 
 export async function createFoodRetailerSummary(
   foodRetailer: FoodRetailerType,
+  facilityType: string
 ): Promise<string> {
   return new Promise((resolve) => {
+    const facilityName = `Facility Type: ${facilityType}`
     const basicInfo = `${foodRetailer.name}, located at ${foodRetailer.location}`
     const campus = foodRetailer.campus
       ? `Campus: ${foodRetailer.campus}`
@@ -83,7 +87,7 @@ export async function createFoodRetailerSummary(
       ? `Additional Info: ${JSON.stringify(foodRetailer.additional_info)}`
       : 'No additional information'
 
-    const summary = `${basicInfo}. ${campus}. ${description}. ${keywords}. ${contact}. ${urls}. ${additionalInfo}`
+    const summary = `${facilityName}, ${basicInfo}. ${campus}. ${description}. ${keywords}. ${contact}. ${urls}. ${additionalInfo}`
     resolve(summary)
   })
 }
@@ -115,8 +119,8 @@ export async function insertScrapeData(): Promise<void> {
         const summaryFunction = facilitySummaryFunctions[_name]
         const recordsWithSummaries = await Promise.all(
           records.map(async (record) => ({
-            pageContent: await summaryFunction(record),
-            metadata: { ...record },
+            pageContent: await summaryFunction(record, _name),
+            metadata: { ...record, facility_type: _name },
           })),
         )
 

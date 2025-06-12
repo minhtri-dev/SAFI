@@ -41,6 +41,10 @@ export const getDatabase = () => {
   return client.db(DB_NAME)
 }
 
+export const getMongoClient = () => {
+  return client
+}
+
 // Handle cleanup and close the database connection
 const gracefulShutdown = (signal: string) => {
   console.log(`Received ${signal}. Closing MongoDB client.`)
