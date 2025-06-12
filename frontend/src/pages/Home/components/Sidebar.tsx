@@ -4,17 +4,16 @@ import { getAllChats } from 'services/chatService'
 
 import type { ChatHistory } from 'types/ChatTypes'
 
-
 const Sidebar = () => {
   const chats: ChatHistory[] = getAllChats().sort(
-      (a, b) =>
-        new Date(b.meta_data.last_saved).getTime() -
-        new Date(a.meta_data.last_saved).getTime()
-    )
+    (a, b) =>
+      new Date(b.meta_data.last_saved).getTime() -
+      new Date(a.meta_data.last_saved).getTime(),
+  )
   const navigate = useNavigate()
 
   const handleClick = () => {
-    navigate('/')
+    void navigate('/')
   }
 
   const truncateMessage = (message: string, maxLength: number): string => {
@@ -39,7 +38,7 @@ const Sidebar = () => {
             <li
               key={chat.meta_data.thread_id}
               className="cursor-pointer rounded p-2 hover:bg-gray-200"
-              onClick={() => navigate(`/${chat.meta_data.thread_id}`)}
+              onClick={void navigate(`/${chat.meta_data.thread_id}`)}
             >
               {truncateMessage(
                 chat.messages[0]?.content || 'No messages yet',

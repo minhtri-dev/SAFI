@@ -13,7 +13,7 @@ export const getChatHistory = (threadId: string): ChatHistory => {
     throw new Error(`No chat history found for thread ID: ${threadId}`)
   }
 
-  const _chatHistory: ChatHistory = JSON.parse(chatHistory)
+  const _chatHistory: ChatHistory = JSON.parse(chatHistory) as ChatHistory
 
   return _chatHistory
 }
@@ -38,7 +38,7 @@ export const getAllChats = (): ChatHistory[] => {
 
       if (chatHistory) {
         try {
-          allHistories.push(JSON.parse(chatHistory))
+          allHistories.push(JSON.parse(chatHistory) as ChatHistory)
         } catch (error) {
           console.error(`Error parsing chat history for key: ${key}`, error)
         }

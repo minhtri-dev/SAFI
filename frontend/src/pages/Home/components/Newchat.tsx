@@ -1,14 +1,22 @@
+import type { AxiosResponse } from 'axios'
 import axios from 'axios'
 import { useNavigate } from 'react-router'
 import { useState } from 'react'
 
 import { saveChatHistory } from 'services/chatService'
 import type { ChatHistory } from 'types/ChatTypes'
+import { Loading } from '@components'
+
+interface SafiResponse {
+  thread_id: string;
+  response: string;
+}
 
 const Newchat = () => {
   const navigate = useNavigate()
-  const API = import.meta.env.VITE_EXPRESS_URL
+  const API: string = import.meta.env.VITE_EXPRESS_URL as string
   const [inputText, setInputText] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleInputChange = (event: React.FormEvent<HTMLTextAreaElement>) => {
     const target = event.currentTarget
@@ -31,13 +39,15 @@ const Newchat = () => {
     if (!inputText.trim()) {
       return
     }
-    try {
-      const result = await axios.post(`${API}/api/safi-request`, {
-        prompt: inputText,
-      })
 
-      const threadId = result.data.thread_id
-      const response = result.data.response
+    setIsLoading(true)
+    try {
+      const result: AxiosResponse<SafiResponse> = await axios.post(`${API}/api/safi-request`, {
+      prompt: inputText,
+    });
+
+      const threadId: string = result.data.thread_id
+      const response: string = result.data.response
 
       const newChat: ChatHistory = {
         messages: [
@@ -57,17 +67,18 @@ const Newchat = () => {
       }
       saveChatHistory(threadId, newChat)
 
-      navigate(`/${threadId}`)
+      void navigate(`/${threadId}`)
     } catch (error) {
       console.error('Error making request:', error)
+    } finally {
+      setIsLoading(false)
     }
   }
 
-
-
-
   return (
     <main className="flex flex-1 flex-col items-center justify-center text-center">
+      {isLoading && <Loading />}
+      {/* Logo and title */}
       <img src="/logo.svg" width={150} />
       <h1 className="mb-3 text-2xl font-semibold text-gray-800">
         SAFI (Model Name)
@@ -91,7 +102,11 @@ const Newchat = () => {
           {/* Right icons */}
           <div className="flex items-center gap-3">
             <button
-              onClick={handleClick}
+              onClick={() => {
+                handleClick().catch((error) => {
+                  console.error('Unhandled error in handleClick:', error);
+                });
+              }}
               className="bg-cyan-blue hover:bg-cyan-blue-hover rounded-full p-2 transition"
             >
               <svg

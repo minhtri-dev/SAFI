@@ -9,15 +9,14 @@ const Home = () => {
   const { threadId } = useParams<{ threadId: string }>()
 
   useEffect(() => {
-    console.log('Thread ID:', threadId)
     try {
       if (threadId && !isThreadInChats(threadId)) {
         console.log('Error fetching chat history: Thread ID not found in chats')
-        navigate('/')
+        void navigate('/')
       }
     } catch (error) {
       console.error('Error fetching chat history:', error)
-      navigate('/')
+      void navigate('/')
     }
   })
 
@@ -28,7 +27,7 @@ const Home = () => {
           {/* Sidebar */}
           <Sidebar />
           {/* Chat area */}
-          
+
           {threadId && isThreadInChats(threadId) ? <Oldchat /> : <Newchat />}
         </div>
       </Layout>
