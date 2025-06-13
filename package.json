@@ -1,0 +1,27 @@
+{
+  "name": "safi",
+  "version": "1.0.0",
+  "description": "Student Assistant for Facility Information.",
+  "scripts": {
+    "dev": "concurrently \"npm run dev --workspace backend\" \"npm run dev --workspace frontend\"",
+    "build": "concurrently \"npm run build --workspace backend\" \"npm run build --workspace frontend\"",
+    "test": "concurrently \"npm run test --workspace backend\" \"npm run test --workspace frontend\""
+  },
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/minhtri-dev/SAFI.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/minhtri-dev/SAFI/issues"
+  },
+  "homepage": "https://github.com/minhtri-dev/SAFI#readme",
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}

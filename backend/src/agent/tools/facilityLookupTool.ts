@@ -1,35 +1,19 @@
 
 import { tool } from "@langchain/core/tools";
-import { MongoDBAtlasVectorSearch } from '@langchain/mongodb'
 import { z } from "zod";
 
-import { FacilityEmbeddings } from "../../services/embeddingsService";
-import { getDatabase } from '../../services/dbService'
+import { getVectorStore } from '../../utils/dbUtils';
 
 export const facilityLookupTool = tool(
   async ({ query, n = 5 }) => {
-    const db = getDatabase()
-    const collection = db.collection("Facility");
-
-    const dbConfig = {
-      collection: collection,
-      indexName: "vector_index",
-      textKey: "embedding_text",
-      embeddingKey: "embeddings",
-    };
-
-    // Initialise vector store
-    const vectorStore = new MongoDBAtlasVectorSearch(
-      new FacilityEmbeddings(),
-      dbConfig
-    );
+    const vectorStore = getVectorStore()
 
     const result = await vectorStore.similaritySearchWithScore(query, n);
     return JSON.stringify(result);
   },
   {
-    name: "facility_lookup",
-    description: "Gathers facility_lookup details from the Safi database",
+    name: "facility_lookup_local",
+    description: "Same function as facilityLookupTool, but can be used locally because of unspecified requirements for assignment 3 that was never mentioned in the specifications of this assignment.",   
     schema: z.object({
       query: z.string().describe("The search query"),
       n: z

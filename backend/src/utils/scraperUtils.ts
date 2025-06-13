@@ -34,8 +34,9 @@ export async function scraper(
   url: string,
   selectors: string[],
   buttonSelector: string,
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Promise<Record<string, any>> {
-  let driver = await new Builder().forBrowser('chrome').build()
+  const driver = await new Builder().forBrowser('chrome').build()
   try {
     await driver.get(url)
 

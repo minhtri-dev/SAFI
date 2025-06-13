@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { invokeBedrock as invoke } from '../services/awsService'
 
-import { getAgent, invokeAgent } from '../agent/agent'
+import { invokeAgent } from '../agent/agent'
 
 export const invokeBedrock = async (
   req: Request,
@@ -25,7 +25,7 @@ export const safiRequest = async (
   res: Response,
 ): Promise<void> => {
   try {
-    const { prompt, max_tokens, temperature, top_p } = req.body
+    const { prompt } = req.body
 
     const threadIdParam = req.params.threadId
     const thread_id = threadIdParam ? threadIdParam : Date.now().toString()

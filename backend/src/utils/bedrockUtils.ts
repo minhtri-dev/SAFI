@@ -1,10 +1,10 @@
-import { FoodRetailerType, getParser } from '../models/FacilityModel'
+import { FoodRetailerType, StudySpaceType, getParser } from '../models/FacilityModel'
 import { invokeBedrock } from '../services/awsService'
 
 export async function formatScrapedData(
   facility: 'FoodRetailer' | 'StudySpace',
   data: object,
-): Promise<FoodRetailerType[]> {
+): Promise<FoodRetailerType[] | StudySpaceType[]> {
   //TODO: Use a more advanced model for data scraping
   const parser = getParser(facility)
 

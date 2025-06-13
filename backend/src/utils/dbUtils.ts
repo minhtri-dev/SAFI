@@ -1,5 +1,4 @@
-import { MongoDBAtlasVectorSearch } from '@langchain/mongodb'
-
+import { HNSWLib } from "@langchain/community/vectorstores/hnswlib";
 import { FacilityEmbeddings } from '../services/embeddingsService'
 import { getScrapedResults } from '../utils/scraperUtils'
 import { formatScrapedData } from '../utils/bedrockUtils'
@@ -18,10 +17,14 @@ const {
   PASSWORD,
 } = config
 
-const facilitySummaryFunctions: Record<
-  string,
-  (record: any, name: string) => Promise<string>
-> = {
+const vectorStore = new HNSWLib(new FacilityEmbeddings(), {space: 'cosine', numDimensions: 384}) 
+
+interface FacilitySummaryFunctions {
+  'Food Retailers': (record: FoodRetailerType, name: string) => Promise<string>
+  'Study Spaces': (record: StudySpaceType, name: string) => Promise<string>
+}
+
+const facilitySummaryFunctions: FacilitySummaryFunctions = {
   'Food Retailers': createFoodRetailerSummary,
   'Study Spaces': createStudySpaceSummary,
 }
@@ -103,40 +106,61 @@ export async function insertScrapeData(): Promise<void> {
     !PASSWORD
   ) {
     throw new Error(
-      'AWS configuration is incomplete. Please check your environment variables.',
+      'AWS configuration is incomplete. Please check your environment variables.'
     )
   }
   // Scrape data
   const _scrapedData = await getScrapedResults()
+  // Get the database (if needed for other operations)
   const db = getDatabase()
 
+  // For each facility type in scraped data, create a vector store using HNSWLib
   await Promise.all(
-    _scrapedData.map(async (facility) => {
-      for (const _name in facility) {
-        const { data } = facility[_name]
-        const collection = db.collection('Facility')
-        const records = await formatScrapedData(facilityMapping[_name], data)
-        const summaryFunction = facilitySummaryFunctions[_name]
-        const recordsWithSummaries = await Promise.all(
-          records.map(async (record) => ({
-            pageContent: await summaryFunction(record, _name),
-            metadata: { ...record, facility_type: _name },
-          })),
-        )
+  _scrapedData.map(async (facility) => {
+    for (const _name in facility) {
+      const { data } = facility[_name]
+      const collection = db.collection('Facility')
+      const records = await formatScrapedData(facilityMapping[_name], data)
+      const summaryFunction =
+        facilitySummaryFunctions[_name as keyof FacilitySummaryFunctions]
 
-        for (const record of recordsWithSummaries) {
-          await MongoDBAtlasVectorSearch.fromDocuments(
-            [record],
-            new FacilityEmbeddings(),
-            {
-              collection,
-              indexName: 'vector_index',
-              textKey: 'embedding_text',
-              embeddingKey: 'embeddings',
-            },
-          )
-        }
-      }
-    }),
-  )
+      const recordsWithSummaries = await Promise.all(
+        records.map(async (record: StudySpaceType | FoodRetailerType) => {
+          let pageContent: string = ''
+          // Use a switch-case to allow adding new facility types in future
+          switch (_name) {
+            case 'Study Spaces':
+              pageContent = await (
+                summaryFunction as (record: StudySpaceType, name: string) => Promise<string>
+              )(record as StudySpaceType, _name)
+              break
+            case 'Food Retailers':
+              pageContent = await (
+                summaryFunction as (record: FoodRetailerType, name: string) => Promise<string>
+              )(record as FoodRetailerType, _name)
+              break
+            default:
+              // For facility types added in the future, provide a default summary
+              pageContent = 'Summary not available'
+              break
+          }
+          return {
+            pageContent,
+            metadata: { ...record, facility_type: _name },
+          }
+        })
+      )
+      
+      // Insert raw records into the collection
+      await collection.insertMany(records)
+      // Add processed documents to the vector store
+      await vectorStore.addDocuments(recordsWithSummaries)
+    }
+  })
+)
+}
+
+
+export function getVectorStore(): HNSWLib {
+  return vectorStore
 }
