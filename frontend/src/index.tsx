@@ -10,7 +10,8 @@ createRoot(document.getElementById('root')!).render(
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Pages.Home />} />
+        <Route path="/:threadId" element={<Pages.Home />} />
       </Routes>
     </BrowserRouter>
-  </StrictMode>
+  </StrictMode>,
 )
