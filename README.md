@@ -6,8 +6,6 @@ SAFI is a full-stack application designed to help RMIT students access the lates
 
 Data is taken from the RMIT website ([RMIT Facilities website](https://www.rmit.edu.au/about/our-locations-and-facilities/facilities)). Currently only the study space and food retailer facilities are being scraped.
 
-This application only requires npm and Nodejs. MongoDB requires no setup as it is ran locally via the npm dependency `mongodb-memory-server`. Because I wasn't aware of this requirement of not being able to use any external APIs, I relied on using Atlas MongoDB (a cloud based solution) as it came with libraries with langchain for embedding/vector searching. As I was only informed of this during the demostration (on the 13th of June) and there was no requirements in the specifications that mentioned this, I was forced to change to a locally hosted MongoDB solution while overhauling the embedding and vector searching functionality as I was unable to use AtlasVectorSearch function because of the switch (AtlasVectorSearch is only supported with their cloud solution). This is the second time where I have been told about a requirement that was never mentioned in the specifications, the first time around I was told I couldn't use any external domain knowledge for the chatbot. I have now wasted several hours on work that won't ever be marked. I hope for future assignments the specifications is made more clear. Please take this into consideration when marking.
-
 Follow the instructions below for a more detailed guide on the installation process/instructions to run.
 
 ## Architecture
