@@ -2,6 +2,11 @@
 
 SAFI is a full-stack application designed to help RMIT students access the latest information on campus facilities such as food retailers and study spaces via a chat interface. It scrapes facility data, processes it with AWS Bedrock and LangChain, and supports vector search.
 
+![image](https://github.com/user-attachments/assets/f15cc888-468c-48b9-baee-5175481f5644)
+![image](https://github.com/user-attachments/assets/70097f8b-9b06-404b-9060-3521e9eed540)
+
+
+
 ## Notes for markers
 
 Data is taken from the RMIT website ([RMIT Facilities website](https://www.rmit.edu.au/about/our-locations-and-facilities/facilities)). Currently only the study space and food retailer facilities are being scraped.
