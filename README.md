@@ -107,6 +107,18 @@ Alternatively you can run **`npm install`**, **`npm run dev`** and **`npm run bu
 
 By default, the frontend server runs on [localhost:5173](http://localhost:5173) and the backend server on [localhost:3000](http://localhost:3000).
 
+Once you have all the dependencies installed (after running ``` npm install```), run the development server using  ```npm run dev``` in the root folder. Both frontend and backend will run via the npm dependency ```concurrently``` so make sure you ran ```npm install``` from the root folder (alternatively you can have two terminals open and run both at the same time). Once both are running you should be able to see the following:
+
+![image](https://github.com/user-attachments/assets/2968d245-3a5c-4888-b737-73df59dc9464)
+
+Both the React and the Express application will run at the same time. However you will need to wait for the backend to scrape and insert the data into the database. A local mongodb instance will be running as well (via the npm dependency `mongodb-memory-server`) so no further configurations are required just make sure that you wait for the data to be inserted. The terminal will respond with "Data inserted sucessfully" if you have done everything right, i.e configuring the environment variables correctly and installed all the npm dependencies. 
+
+![image](https://github.com/user-attachments/assets/22dcc7e5-05b6-47f0-a169-b0b83fa4b809)
+
+#### Additional Notes
+
+Because I wasn't aware of this requirement of not being able to use any external APIs, I relied on using Atlas MongoDB (a cloud based solution) as it came with libraries with langchain for embedding/vector searching. As I was only informed of this during the demostration (on the 13th of June) and there was no requirements in the specifications that mentioned this, I was forced to change to a locally hosted MongoDB solution last minute while overhauling the embedding and vector searching functionality as I was unable to use AtlasVectorSearch function because of the switch (AtlasVectorSearch is only supported with their cloud solution). This is the second time where I have been told about a requirement that was never mentioned in the specifications, the first time around I was told I couldn't use any external domain knowledge for the chatbot. I have now wasted several hours on work that won't ever be marked. I hope for future assignments the specifications is made more clear. With that being said, there has been no time for any testing on the current code base so it should be considered to be unstable and bugs should be expected which may affect the chatbot functionality. Please take this into consideration when marking.
+
 ## Scripts and Commands
 
 ### Root Scripts
