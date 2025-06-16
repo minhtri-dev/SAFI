@@ -95,7 +95,7 @@ const Oldchat = () => {
   return (
     <main className="flex flex-1 flex-col items-center">
       <div className="flex h-12/12 w-full max-w-2xl flex-col px-6">
-        <div className=" flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto flex flex-col space-y-4">
           {chatMessages.map((msg, idx) => (
             <div
               key={idx}
@@ -123,15 +123,15 @@ const Oldchat = () => {
             </div>
           )}
         </div>
-      </div>
-      <div className="flex w-full items-center align-bottom rounded-2xl bg-white px-4 py-3 text-gray-800">
+        <div className="flex w-full items-center align-bottom rounded-2xl mb-5 mt
+        -5 bg-white px-3 py-2 text-gray-800">
         <textarea
           rows={1}
           placeholder="Ask about RMIT facilities"
           onInput={handleInputChange}
           value={inputText}
           style={{ overflow: 'hidden' }}
-          className="mx-4 flex-1 resize-none bg-transparent text-left text-gray-800 placeholder-gray-400 focus:outline-none"
+          className="mx-4 flex-1 resize-none bg-transparent text-left text-gray-800 placeholder-gray-400 focus:outline-none p-2"
         />
         <button
           onClick={() => {
@@ -156,6 +156,8 @@ const Oldchat = () => {
           </svg>
         </button>
       </div>
+      </div>
+      
     </main>
   )
 }
